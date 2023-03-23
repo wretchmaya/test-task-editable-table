@@ -47,6 +47,11 @@ export default function(state = initialTableState, action) {
                 ...state,
                 isModalOpened: !state.isModalOpened,
             };
+        case CNST.USERS.SORT_USERS_IN_STORE:
+            return {
+                ...state,
+                users: [...action.payload],
+            };
 
         default:
             return state;

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import TableHead from './TableHead/index';
 import TableRow from './TableRow/index';
 import { getFromLocalStorage } from '../../helpers/localStorageActions';
@@ -29,20 +29,47 @@ const StyledTable = styled.table`
 
     th {
         background-color: #f2f2f2;
+        cursor: pointer;
     }
 `;
 
-export const Table = ({ users, getUsers, isLoading, isModalOpened }) => {
+export const Table = ({ users, getUsers, isLoading, isModalOpened, sortUsers }) => {
+    const [sortBy, setSortBy] = useState({ column: '', direction: 'asc' });
+
+    const handleSortOrder = e => {
+        if (e.target.id === 'about') return;
+        setSortBy(state => ({
+            column: e.target.id,
+            direction: state.direction === 'asc' ? 'decs' : 'asc',
+        }));
+    };
+
+    useEffect(() => {
+        const sortedUsers = [...users].sort((a, b) => {
+            if (a[sortBy.column] < b[sortBy.column]) {
+                return sortBy.direction === 'asc' ? -1 : 1;
+            }
+            if (a[sortBy.column] > b[sortBy.column]) {
+                return sortBy.direction === 'asc' ? 1 : -1;
+            }
+        });
+        sortUsers(sortedUsers);
+    }, [sortBy]);
+
     useEffect(() => {
         getUsers();
     }, []);
+
     return (
         <>
             {isLoading ? (
                 <h1>LOADING...</h1>
             ) : (
                 <StyledTable>
-                    <TableHead />
+                    <TableHead
+                        handleSortOrder={handleSortOrder}
+                        sortOrder={sortBy.direction}
+                    />
                     <tbody>
                         {users.map(user => {
                             const cachedUser = getFromLocalStorage(user.id);

@@ -26,3 +26,8 @@ export const openModalFormAction = () => ({
 export const closeModalFormAction = () => ({
     type: CNST.USERS.CREATE_USER.MODAL_FORM.CLOSE,
 });
+
+export const sortUsersAction = payload => ({
+    type: CNST.USERS.SORT_USERS_IN_STORE,
+    payload,
+});
