@@ -10,4 +10,5 @@ export const getFromLocalStorage = id => {
     return null;
 };
 
-export const removeFromLocalStorage = id => localStorage.removeItem(id);
+export const removeFromLocalStorage = id =>
+    id ? localStorage.removeItem(id) : localStorage.clear();

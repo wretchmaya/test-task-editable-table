@@ -13,6 +13,7 @@ export function* getUsers() {
     try {
         const response = yield call(getUsersRequest);
         if (isResponseOk(response)) {
+						removeFromLocalStorage();
             yield put({
                 type: CNST.USERS.GET_USERS.SUCCESS,
                 payload: response.data,
